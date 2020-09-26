@@ -17,9 +17,23 @@ class PositionsPage extends StatelessWidget {
           title: Text(this.title),
         ),
         body: Consumer<MainStore>(
-          builder: (context, model, child) => Container(
-            child: Text(model.title),
-          ),
+          builder: (context, model, child) {
+            if (!model.hasFetched) {
+              model.fetchPositions();
+              return Text('is loading...');
+            }
+            return ListView.builder(
+                padding: const EdgeInsets.all(8),
+                itemCount: model.activePositions.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return Container(
+                    height: 50,
+                    child: Center(
+                        child: Text(
+                            'Entry ${model.activePositions[index].toString()}')),
+                  );
+                });
+          },
           child: Container(),
         ),
         floatingActionButton: FloatingActionButton(
