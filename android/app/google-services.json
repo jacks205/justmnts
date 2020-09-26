@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "322140669812",
+    "firebase_url": "https://justmnts-sokware.firebaseio.com",
+    "project_id": "justmnts-sokware",
+    "storage_bucket": "justmnts-sokware.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:322140669812:android:74beffae88618411da4e21",
+        "android_client_info": {
+          "package_name": "com.sokware.app.justmnts"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "322140669812-rmc2ir0dojtbk0nha6kmq29v45pk8qpk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA3mW3H4HR3LdLZm02qx8zt8EwdiY7knbE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "322140669812-rmc2ir0dojtbk0nha6kmq29v45pk8qpk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
