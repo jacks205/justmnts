@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:intl/intl.dart';
+
 import 'Calculable.dart';
 
 class Option implements Calculable {
@@ -75,5 +77,11 @@ class Option implements Calculable {
         strikePrice.hashCode ^
         quantity.hashCode ^
         price.hashCode;
+  }
+
+  String get positionHash {
+    DateFormat formatter = DateFormat(
+        '${DateFormat.YEAR}-${DateFormat.ABBR_MONTH}-${DateFormat.DAY}');
+    return '${formatter.format(expirationDate)}-$strikePrice';
   }
 }

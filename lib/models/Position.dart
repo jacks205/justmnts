@@ -1,7 +1,10 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:flutter/foundation.dart';
 import 'package:justmnts/models/Adjustment.dart';
+
+import 'Option.dart';
 
 class Position {
   final String title;
@@ -96,4 +99,53 @@ class Position {
         adjustments.hashCode ^
         isArchived.hashCode;
   }
+
+  Map<String, MutableOption> get openPositionsMap {
+    Map<String, MutableOption> map = {};
+    adjustments.forEach((adjustment) {
+      adjustment.options.forEach((option) {
+        String optionHash = option.positionHash;
+        if (map[optionHash] == null) {
+          map[optionHash] = MutableOption(
+              expirationDate: option.expirationDate,
+              strikePrice: option.strikePrice);
+        }
+        map[optionHash].quantity = map[optionHash].quantity + option.quantity;
+        map[optionHash].price = map[optionHash].price + option.price;
+      });
+    });
+    log(map.toString());
+    return map;
+  }
+
+  List<Option> get openPositions {
+    List<Option> options = [];
+    Map<String, MutableOption> map = openPositionsMap;
+    map.forEach((key, value) {
+      if (value.quantity != 0) {
+        options.add(value);
+      }
+    });
+    return options;
+  }
+
+  int get netOptions => adjustments
+      .map((e) => e.calculateNetOptions)
+      .reduce((value, element) => value + element);
+  int get netStocks => adjustments
+      .map((e) => e.calculateNetStocks)
+      .reduce((value, element) => value + element);
+}
+
+class MutableOption extends Option {
+  DateTime expirationDate;
+  int strikePrice;
+  int quantity;
+  int price;
+  MutableOption({
+    this.expirationDate,
+    this.strikePrice,
+    this.quantity = 0,
+    this.price = 0,
+  });
 }

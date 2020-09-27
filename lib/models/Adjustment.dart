@@ -87,4 +87,12 @@ class Adjustment {
         options.hashCode ^
         stocks.hashCode;
   }
+
+  int get calculateNetOptions => options
+      .map((e) => e.price * e.quantity)
+      .reduce((value, element) => value + element);
+
+  int get calculateNetStocks => stocks
+      .map((e) => e.price * e.quantity)
+      .reduce((value, element) => value + element);
 }
