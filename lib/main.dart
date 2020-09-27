@@ -4,7 +4,6 @@ import 'package:flutter/rendering.dart';
 import 'package:justmnts/AuthStore.dart';
 import 'package:justmnts/positions/CreatePositionPage.dart';
 import 'package:justmnts/positions/PositionsPage.dart';
-import 'package:justmnts/positions/ViewPositionsPage.dart';
 import 'package:provider/provider.dart';
 
 import 'MainStore.dart';
@@ -71,7 +70,6 @@ class MyApp extends StatelessWidget {
             ),
         // When navig ating to the "/second" route, build the SecondScreen widget.
         '/createPosition': (context) => CreatePositionPage(),
-        ViewPositionsPage.routeName: (context) => ViewPositionsPage()
       },
     );
   }
