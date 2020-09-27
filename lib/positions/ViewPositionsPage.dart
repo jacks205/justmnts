@@ -19,9 +19,7 @@ class ViewPositionsPage extends StatelessWidget {
                   title: Text(entry.value.title),
                   subtitle: Text(formatter.format(entry.value.createdAt)),
                   children: <Widget>[
-                    Text('Big Bang'),
-                    Text('Birth of the Sun'),
-                    Text('Earth is Born'),
+                    Text(entry.value.note),
                   ],
                 ),
               ))
@@ -33,50 +31,35 @@ class ViewPositionsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final Position position = ModalRoute.of(context).settings.arguments;
     return Scaffold(
-      appBar: AppBar(
-        title: Text(position.title),
-      ),
-      body: SafeArea(
-        child: Column(
-          children: [
-            Container(
-              color: Colors.amber,
-              child: Center(
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      Container(
-                        child: Column(
-                          children: [
-                            Text('Summary'),
-                            Text(position.title),
-                            Text(position.createdAt.toIso8601String()),
-                            Text(
-                                'Net Options: ${position.netOptions.toString()}'),
-                            Text(
-                                'Net Stocks: ${position.netStocks.toString()}'),
-                            Column(
-                              children: position.openPositions.map((element) {
-                                DateFormat formatter = DateFormat(
-                                    '${DateFormat.DAY} ${DateFormat.ABBR_MONTH}');
-                                return Text(
-                                    '${formatter.format(element.expirationDate)} - \$${element.strikePrice}, ${element.quantity}, Net: ${element.price}');
-                              }).toList(),
-                            ),
-                            _buildAdjustmentList(position.adjustments)
-                          ],
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-              ),
-            ),
-            Spacer(),
-            Text('Bottom')
-          ],
+        appBar: AppBar(
+          title: Text(position.title),
         ),
-      ),
-    );
+        body: SafeArea(
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                Text('Summary'),
+                Text(position.title),
+                Text(position.createdAt.toIso8601String()),
+                Text('Net Options: ${position.netOptions.toString()}'),
+                Text('Net Stocks: ${position.netStocks.toString()}'),
+                Column(
+                  children: position.openPositions.map((element) {
+                    DateFormat formatter = DateFormat(
+                        '${DateFormat.DAY} ${DateFormat.ABBR_MONTH}');
+                    return Text(
+                        '${formatter.format(element.expirationDate)} - \$${element.strikePrice}, ${element.quantity}, Net: ${element.price}');
+                  }).toList(),
+                ),
+                _buildAdjustmentList(position.adjustments)
+              ],
+            ),
+          ),
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () => Navigator.of(context).pushNamed('/createAdjustment'),
+          tooltip: 'Add Adjustment',
+          child: Icon(Icons.add),
+        ));
   }
 }

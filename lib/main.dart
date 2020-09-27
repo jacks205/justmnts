@@ -70,6 +70,7 @@ class MyApp extends StatelessWidget {
             ),
         // When navig ating to the "/second" route, build the SecondScreen widget.
         '/createPosition': (context) => CreatePositionPage(),
+        '/position': (context) => ViewPositionsPage(),
       },
     );
   }

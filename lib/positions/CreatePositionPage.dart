@@ -32,7 +32,7 @@ class _CreatePositionPageState extends State<CreatePositionPage> {
   String _newSymbol;
   String _error;
 
-  Position _createPosition(BuildContext context, MainStore model) {
+  Future<void> _createPosition(BuildContext context, MainStore model) async {
     try {
       if (_newTitle == null) {
         throw ('Title incorrect');
@@ -78,43 +78,44 @@ class _CreatePositionPageState extends State<CreatePositionPage> {
         ),
         body: SafeArea(
           bottom: true,
-          child: Column(
-            children: [
-              SingleChildScrollView(
-                child: Column(
-                  children: [
-                    buildErrorOrEmpty(),
-                    createTextField('Title', (value) {
-                      this._newTitle = value;
-                      log(this._newTitle);
-                    }),
-                    createTextField('Description', (value) {
-                      this._newDescription = value;
-                      log(this._newDescription);
-                    }),
-                    createTextField('Symbol', (value) {
-                      setState(() {
-                        this._newSymbol = value;
-                      });
-                      log(this._newSymbol);
-                    }),
-                  ],
+          child: Stack(children: [
+            SingleChildScrollView(
+              padding: EdgeInsets.only(bottom: 120),
+              child: Column(
+                children: [
+                  buildErrorOrEmpty(),
+                  createTextField('Title', (value) {
+                    this._newTitle = value;
+                    log(this._newTitle);
+                  }),
+                  createTextField('Description', (value) {
+                    this._newDescription = value;
+                    log(this._newDescription);
+                  }),
+                  createTextField('Symbol', (value) {
+                    setState(() {
+                      this._newSymbol = value;
+                    });
+                    log(this._newSymbol);
+                  }),
+                ],
+              ),
+            ),
+            Positioned(
+              child: Align(
+                alignment: FractionalOffset.bottomCenter,
+                child: Consumer<MainStore>(
+                  builder: (context, model, child) => MaterialButton(
+                    onPressed: () async =>
+                        await _createPosition(context, model),
+                    color: Theme.of(context).accentColor,
+                    height: 40.0,
+                    child: Text('Create $_newSymbol Position'),
+                  ),
                 ),
               ),
-              Spacer(),
-              Consumer<MainStore>(
-                builder: (context, model, child) => MaterialButton(
-                  onPressed: () => _createPosition(context, model),
-                  color: Theme.of(context).accentColor,
-                  height: 40.0,
-                  child: Text('Create $_newSymbol Position'),
-                ),
-              ),
-              SizedBox(
-                height: 10.0,
-              )
-            ],
-          ),
+            )
+          ]),
         ));
   }
 }
