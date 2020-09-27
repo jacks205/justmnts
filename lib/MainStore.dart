@@ -19,14 +19,14 @@ class MainStore extends ChangeNotifier {
     List<Position> positions = await Future.delayed(Duration(seconds: 2))
         .then((value) => Future.value([
               Position(
-                  name: 'TSLA Memes',
+                  title: 'TSLA Memes',
                   symbol: 'TSLA',
                   description: 'A meme place for TSLA',
                   adjustments: [],
                   createdAt: DateTime.now(),
                   isArchived: false),
               Position(
-                  name: 'AMD Memes',
+                  title: 'AMD Memes',
                   symbol: 'AMD',
                   description: 'A meme place for AMD',
                   adjustments: [],
@@ -35,6 +35,12 @@ class MainStore extends ChangeNotifier {
             ]));
     _positions = positions;
     hasFetched = true;
+    notifyListeners();
+  }
+
+  void createNewPosition(Position position) {
+    // TODO: Firebase
+    _positions.add(position);
     notifyListeners();
   }
 }

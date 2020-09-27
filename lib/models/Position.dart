@@ -4,23 +4,25 @@ import 'package:flutter/foundation.dart';
 import 'package:justmnts/models/Adjustment.dart';
 
 class Position {
-  final String name;
+  final String title;
   final String description;
   final String symbol;
   final DateTime createdAt;
   final List<Adjustment> adjustments;
   final bool isArchived;
   Position({
-    this.name,
+    this.title,
     this.description,
     this.symbol,
-    this.createdAt,
-    this.adjustments,
-    this.isArchived,
-  });
+    DateTime createdAt,
+    List<Adjustment> adjustments,
+    isArchived,
+  })  : createdAt = createdAt ?? DateTime.now(),
+        adjustments = adjustments ?? List<Adjustment>(),
+        isArchived = isArchived ?? false;
 
   Position copyWith({
-    String name,
+    String title,
     String description,
     String symbol,
     DateTime createdAt,
@@ -28,7 +30,7 @@ class Position {
     bool isArchived,
   }) {
     return Position(
-      name: name ?? this.name,
+      title: title ?? this.title,
       description: description ?? this.description,
       symbol: symbol ?? this.symbol,
       createdAt: createdAt ?? this.createdAt,
@@ -39,7 +41,7 @@ class Position {
 
   Map<String, dynamic> toMap() {
     return {
-      'name': name,
+      'title': title,
       'description': description,
       'symbol': symbol,
       'createdAt': createdAt?.millisecondsSinceEpoch,
@@ -52,7 +54,7 @@ class Position {
     if (map == null) return null;
 
     return Position(
-      name: map['name'],
+      title: map['title'],
       description: map['description'],
       symbol: map['symbol'],
       createdAt: DateTime.fromMillisecondsSinceEpoch(map['createdAt']),
@@ -69,7 +71,7 @@ class Position {
 
   @override
   String toString() {
-    return 'Position(name: $name, description: $description, symbol: $symbol, createdAt: $createdAt, adjustments: $adjustments, isArchived: $isArchived)';
+    return 'Position(title: $title, description: $description, symbol: $symbol, createdAt: $createdAt, adjustments: $adjustments, isArchived: $isArchived)';
   }
 
   @override
@@ -77,7 +79,7 @@ class Position {
     if (identical(this, o)) return true;
 
     return o is Position &&
-        o.name == name &&
+        o.title == title &&
         o.description == description &&
         o.symbol == symbol &&
         o.createdAt == createdAt &&
@@ -87,7 +89,7 @@ class Position {
 
   @override
   int get hashCode {
-    return name.hashCode ^
+    return title.hashCode ^
         description.hashCode ^
         symbol.hashCode ^
         createdAt.hashCode ^

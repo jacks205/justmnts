@@ -37,7 +37,7 @@ class PositionsPage extends StatelessWidget {
           child: Container(),
         ),
         floatingActionButton: FloatingActionButton(
-          onPressed: () => Navigator.of(context).pushNamed('/create-position'),
+          onPressed: () => Navigator.of(context).pushNamed('/createPosition'),
           tooltip: 'Add Position',
           child: Icon(Icons.add),
         ));
