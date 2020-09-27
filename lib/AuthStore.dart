@@ -4,17 +4,21 @@ import 'package:flutter/foundation.dart';
 
 class AuthStore extends ChangeNotifier {
   FirebaseAuth _firebaseAuth = FirebaseAuth.instanceFor(app: Firebase.app());
-  bool isLoggedIn = false;
+  User user;
+  bool hasCurrentUser;
+  bool hasSignedIn = false;
 
   AuthStore() {
-    isLoggedIn = _firebaseAuth.currentUser != null;
-    print(isLoggedIn);
+    hasCurrentUser = _firebaseAuth.currentUser != null;
     _firebaseAuth.authStateChanges().listen((user) {
-      print(user);
-      isLoggedIn = user != null;
+      this.user = user;
+      notifyListeners();
     });
   }
   void anonSignIn() async {
-    _firebaseAuth.signInAnonymously();
+    if (user == null && !hasSignedIn) {
+      hasSignedIn = true;
+      await _firebaseAuth.signInAnonymously();
+    }
   }
 }

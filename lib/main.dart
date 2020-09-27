@@ -1,5 +1,9 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+<<<<<<< HEAD
+=======
+import 'package:flutter/rendering.dart';
+>>>>>>> josh_derp_branch
 import 'package:justmnts/AuthStore.dart';
 import 'package:justmnts/positions/PositionsPage.dart';
 import 'package:provider/provider.dart';
@@ -44,13 +48,22 @@ class MyApp extends StatelessWidget {
               bodyText2: TextStyle(fontSize: 14.0, fontFamily: 'Hind'),
             ),
             visualDensity: VisualDensity.adaptivePlatformDensity),
-        home: Consumer2<MainStore, AuthStore>(
-          builder: (context, m1, model, _) {
-            if (model.isLoggedIn) {
-              return PositionsPage(title: 'Positions Logged In');
+        home: Consumer<AuthStore>(
+          builder: (context, model, _) {
+            print("hasCurrentUser: ${model.hasCurrentUser}");
+            print("user not null: ${model.user != null}");
+            if (model.hasCurrentUser || model.user != null) {
+              return PositionsPage(title: 'Positions');
             } else {
               model.anonSignIn();
-              return PositionsPage(title: 'Positions Logged Out');
+              return Center(
+                  widthFactor: 3,
+                  heightFactor: 3,
+                  child: CircularProgressIndicator(
+                      strokeWidth: 3,
+                      backgroundColor: Color.fromRGBO(71, 71, 71, 1),
+                      valueColor: AlwaysStoppedAnimation<Color>(
+                          Color.fromRGBO(151, 153, 235, 1))));
             }
           },
         ));
