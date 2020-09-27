@@ -29,15 +29,15 @@ class PositionsPage extends StatelessWidget {
                   return Container(
                     height: 50,
                     child: Center(
-                        child: Text(
-                            'Entry ${model.activePositions[index].toString()}')),
+                        child:
+                            Text('${model.activePositions[index].toString()}')),
                   );
                 });
           },
           child: Container(),
         ),
         floatingActionButton: FloatingActionButton(
-          // onPressed: _changeTitle,
+          onPressed: () => Navigator.of(context).pushNamed('/create-position'),
           tooltip: 'Add Position',
           child: Icon(Icons.add),
         ));
