@@ -3,6 +3,8 @@ import 'package:intl/intl.dart';
 import 'package:justmnts/models/Adjustment.dart';
 import 'package:justmnts/models/Position.dart';
 
+import '../main.dart';
+
 class ViewPositionsPage extends StatelessWidget {
   static final String routeName = '/position';
   const ViewPositionsPage({Key key}) : super(key: key);
@@ -57,7 +59,7 @@ class ViewPositionsPage extends StatelessWidget {
           ),
         ),
         floatingActionButton: FloatingActionButton(
-          onPressed: () => Navigator.of(context).pushNamed('/createAdjustment'),
+          onPressed: () => Navigator.of(context).pushNamed(createAdjustmentPage),
           tooltip: 'Add Adjustment',
           child: Icon(Icons.add),
         ));

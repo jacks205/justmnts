@@ -2,11 +2,15 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:justmnts/AuthStore.dart';
+import 'package:justmnts/adjustments/CreateAdjustmentsPage.dart';
 import 'package:justmnts/positions/CreatePositionPage.dart';
 import 'package:justmnts/positions/PositionsPage.dart';
+import 'package:justmnts/positions/ViewPositionsPage.dart';
 import 'package:provider/provider.dart';
 
 import 'MainStore.dart';
+
+const String createAdjustmentPage = '/createAdjustmentPage';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -71,6 +75,7 @@ class MyApp extends StatelessWidget {
         // When navig ating to the "/second" route, build the SecondScreen widget.
         '/createPosition': (context) => CreatePositionPage(),
         '/position': (context) => ViewPositionsPage(),
+        createAdjustmentPage: (context) => CreateAdjustmentsPage(),
       },
     );
   }

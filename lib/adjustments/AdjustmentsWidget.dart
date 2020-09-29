@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:justmnts/adjustments/AddStockOrOptionRowWidget.dart';
 import 'package:justmnts/adjustments/OptionsRowWidget.dart';
 import 'package:justmnts/adjustments/StockRowWidget.dart';
 
@@ -12,6 +13,20 @@ class AdjustmentsWidget extends StatefulWidget {
 
 class _AdjustmentsWidgetState extends State<AdjustmentsWidget> {
   DateTime _selectedDate = DateTime.now();
+  List<Widget> _optionsAndStocksWidgets = List<Widget>();
+  void Function() _saveOnPress;
+
+  void _addOptions() {
+    setState(() {
+      _optionsAndStocksWidgets.add(OptionsRowWidget());
+    });
+  }
+
+  void _addStock() {
+    setState(() {
+      _optionsAndStocksWidgets.add(StockRowWidget());
+    });
+  }
 
   Future<Null> _selectDate(BuildContext context) async {
     final DateTime picked = await showDatePicker(
@@ -27,10 +42,15 @@ class _AdjustmentsWidgetState extends State<AdjustmentsWidget> {
   }
 
   Widget buildErrorOrEmpty() {
-    return Column(children: [
-      StockRowWidget(color: Color.fromRGBO(0, 134, 0, 1)),
-      OptionsRowWidget(color: Color.fromRGBO(134, 0, 0, 1)),
-    ]);
+    if (_optionsAndStocksWidgets.isEmpty) {
+      this._saveOnPress = null;
+      return AddStockOrOptionRowWidget();
+    } else {
+      this._saveOnPress = () {
+        this._optionsAndStocksWidgets.forEach((element) {});
+      };
+      return Column(children: _optionsAndStocksWidgets);
+    }
   }
 
   @override
@@ -67,6 +87,7 @@ class _AdjustmentsWidgetState extends State<AdjustmentsWidget> {
                             onPressed: () => _selectDate(context))))
               ],
             )),
+        buildErrorOrEmpty(),
         Padding(
             padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
             child: TextField(
@@ -78,46 +99,45 @@ class _AdjustmentsWidgetState extends State<AdjustmentsWidget> {
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.all(Radius.circular(10))),
                 ))),
-        buildErrorOrEmpty(),
+        // AdjustmentSummaryWidget(),
+        MaterialButton(
+          onPressed: this._saveOnPress,
+          child: Text(
+            "Save",
+            style: TextStyle(
+              fontSize: 18,
+            ),
+          ),
+        )
       ])),
-      Expanded(
-          flex: 1,
-          child: Align(
-              alignment: FractionalOffset.bottomCenter,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Padding(
-                      padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
-                      child: MaterialButton(
-                        color: Theme.of(context).accentColor,
-                        splashColor: Theme.of(context).splashColor,
-                        disabledColor: Theme.of(context).disabledColor,
-                        onPressed: () {
-                          print("Test");
-                        },
-                        child: Text(
-                          "Add option",
-                          style: TextStyle(fontSize: 18, color: Colors.white),
-                          key: Key("dateText"),
-                        ),
-                      )),
-                  Padding(
-                      padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
-                      child: MaterialButton(
-                        color: Theme.of(context).accentColor,
-                        disabledColor: Theme.of(context).disabledColor,
-                        onPressed: () {
-                          print("Test");
-                        },
-                        child: Text(
-                          "Add stock",
-                          style: TextStyle(fontSize: 18, color: Colors.white),
-                          key: Key("dateText"),
-                        ),
-                      ))
-                ],
-              )))
+      Align(
+          alignment: FractionalOffset.bottomCenter,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Padding(
+                  padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+                  child: MaterialButton(
+                    color: Theme.of(context).accentColor,
+                    splashColor: Theme.of(context).splashColor,
+                    disabledColor: Theme.of(context).disabledColor,
+                    onPressed: () => _addOptions(),
+                    child: Text(
+                      "Add option",
+                      style: TextStyle(fontSize: 18, color: Colors.white),
+                    ),
+                  )),
+              Padding(
+                  padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+                  child: MaterialButton(
+                    color: Theme.of(context).accentColor,
+                    disabledColor: Theme.of(context).disabledColor,
+                    onPressed: () => _addStock(),
+                    child: Text("Add stock",
+                        style: TextStyle(fontSize: 18, color: Colors.white)),
+                  ))
+            ],
+          ))
     ]);
   }
 }
