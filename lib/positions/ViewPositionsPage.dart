@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:justmnts/models/Adjustment.dart';
 import 'package:justmnts/models/Position.dart';
+import 'package:provider/provider.dart';
 
+import '../MainStore.dart';
 import '../main.dart';
 
 class ViewPositionsPage extends StatelessWidget {
@@ -34,13 +36,15 @@ class ViewPositionsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Position position = ModalRoute.of(context).settings.arguments;
+    log('Net Options: ${position.toString()}');
     return Scaffold(
         appBar: AppBar(
           title: Text(position.title),
         ),
         body: SafeArea(
           child: SingleChildScrollView(
-            child: Column(
+              child: Consumer<MainStore>(
+            builder: (context, model, child) => Column(
               children: [
                 Text('Summary'),
                 Text(position.title),
@@ -58,7 +62,7 @@ class ViewPositionsPage extends StatelessWidget {
                 _buildAdjustmentList(position.adjustments)
               ],
             ),
-          ),
+          )),
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () => Navigator.of(context)

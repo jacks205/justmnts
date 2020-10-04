@@ -131,10 +131,10 @@ class Position {
 
   int get netOptions => adjustments
       .map((e) => e.calculateNetOptions)
-      .reduce((value, element) => value + element);
+      .fold(0, (value, element) => value + element);
   int get netStocks => adjustments
       .map((e) => e.calculateNetStocks)
-      .reduce((value, element) => value + element);
+      .fold(0, (value, element) => value + element);
 }
 
 class MutableOption extends Option {
