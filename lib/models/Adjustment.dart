@@ -90,9 +90,9 @@ class Adjustment {
 
   int get calculateNetOptions => options
       .map((e) => e.price * e.quantity)
-      .reduce((value, element) => value + element);
+      .fold(0, (value, element) => value + element);
 
   int get calculateNetStocks => stocks
       .map((e) => e.price * e.quantity)
-      .reduce((value, element) => value + element);
+      .fold(0, (value, element) => value + element);
 }

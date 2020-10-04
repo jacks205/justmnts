@@ -3,18 +3,32 @@ import 'package:flutter/material.dart';
 import 'package:justmnts/adjustments/AddStockOrOptionRowWidget.dart';
 import 'package:justmnts/adjustments/OptionsRowWidget.dart';
 import 'package:justmnts/adjustments/StockRowWidget.dart';
+import 'package:justmnts/models/Adjustment.dart';
+import 'package:justmnts/models/Option.dart';
+import 'package:justmnts/models/Position.dart';
+import 'package:justmnts/adjustments/AdjustmentRow.dart';
+import 'package:justmnts/models/Stock.dart';
+import 'package:provider/provider.dart';
+
+import '../MainStore.dart';
 
 class AdjustmentsWidget extends StatefulWidget {
-  const AdjustmentsWidget({Key key}) : super(key: key);
+  final Position position;
+  const AdjustmentsWidget({Key key, this.position}) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => _AdjustmentsWidgetState();
+  State<StatefulWidget> createState() =>
+      _AdjustmentsWidgetState(position: this.position);
 }
 
 class _AdjustmentsWidgetState extends State<AdjustmentsWidget> {
+  _AdjustmentsWidgetState({this.position});
+  final Position position;
+  String _title;
+  String _notes;
   DateTime _selectedDate = DateTime.now();
   List<Widget> _optionsAndStocksWidgets = List<Widget>();
-  void Function() _saveOnPress;
+  void Function(MainStore model) _saveOnPress;
 
   void _addOptions() {
     setState(() {
@@ -42,12 +56,34 @@ class _AdjustmentsWidgetState extends State<AdjustmentsWidget> {
   }
 
   Widget buildErrorOrEmpty() {
+    final Position position = ModalRoute.of(context).settings.arguments;
+
     if (_optionsAndStocksWidgets.isEmpty) {
       this._saveOnPress = null;
       return AddStockOrOptionRowWidget();
     } else {
-      this._saveOnPress = () {
-        this._optionsAndStocksWidgets.forEach((element) {});
+      this._saveOnPress = (MainStore model) {
+        List<Stock> stocks = List<Stock>();
+        List<Option> options = List<Option>();
+
+        this._optionsAndStocksWidgets.forEach((element) {
+          if (element is StockRowWidget) {
+            stocks.add(element.getStock(context));
+          } else if (element is OptionsRowWidget) {
+            options.add(element.getOption(context));
+          }
+        });
+
+        model.addAdjustment(
+            Adjustment(
+                title: _title,
+                note: _notes,
+                createdAt: DateTime.now(),
+                stocks: stocks,
+                options: options),
+            position);
+
+        Navigator.of(context).pop();
       };
       return Column(children: _optionsAndStocksWidgets);
     }
@@ -59,7 +95,7 @@ class _AdjustmentsWidgetState extends State<AdjustmentsWidget> {
       SingleChildScrollView(
           child: Column(children: [
         Padding(
-            padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+            padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
@@ -68,12 +104,15 @@ class _AdjustmentsWidgetState extends State<AdjustmentsWidget> {
                     child: Padding(
                         padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
                         child: TextField(
+                            onChanged: (text) {
+                              _title = text;
+                            },
                             decoration: InputDecoration(
-                          hintText: "Adjustment Title",
-                          border: OutlineInputBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(10))),
-                        )))),
+                              hintText: "Adjustment Title",
+                              border: OutlineInputBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(10))),
+                            )))),
                 Flexible(
                     flex: 1,
                     child: Padding(
@@ -91,6 +130,9 @@ class _AdjustmentsWidgetState extends State<AdjustmentsWidget> {
         Padding(
             padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
             child: TextField(
+                onChanged: (text) {
+                  _notes = text;
+                },
                 keyboardType: TextInputType.multiline,
                 maxLines: 6,
                 minLines: 6,
@@ -100,15 +142,16 @@ class _AdjustmentsWidgetState extends State<AdjustmentsWidget> {
                       borderRadius: BorderRadius.all(Radius.circular(10))),
                 ))),
         // AdjustmentSummaryWidget(),
-        MaterialButton(
-          onPressed: this._saveOnPress,
-          child: Text(
-            "Save",
-            style: TextStyle(
-              fontSize: 18,
-            ),
-          ),
-        )
+        Consumer<MainStore>(
+            builder: (context, model, child) => MaterialButton(
+                  onPressed: () => _saveOnPress(model),
+                  child: Text(
+                    "Save",
+                    style: TextStyle(
+                      fontSize: 18,
+                    ),
+                  ),
+                )),
       ])),
       Align(
           alignment: FractionalOffset.bottomCenter,
