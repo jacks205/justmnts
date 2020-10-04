@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:justmnts/models/Adjustment.dart';
@@ -59,7 +61,8 @@ class ViewPositionsPage extends StatelessWidget {
           ),
         ),
         floatingActionButton: FloatingActionButton(
-          onPressed: () => Navigator.of(context).pushNamed(createAdjustmentPage),
+          onPressed: () => Navigator.of(context)
+              .pushNamed(createAdjustmentPage, arguments: position),
           tooltip: 'Add Adjustment',
           child: Icon(Icons.add),
         ));

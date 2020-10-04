@@ -55,8 +55,6 @@ class MyApp extends StatelessWidget {
         // When navigating to the "/" route, build the FirstScreen widget.
         '/': (context) => Consumer<AuthStore>(
               builder: (context, model, _) {
-                print("hasCurrentUser: ${model.hasCurrentUser}");
-                print("user not null: ${model.user != null}");
                 if (model.hasCurrentUser || model.user != null) {
                   return PositionsPage(title: 'Positions');
                 } else {

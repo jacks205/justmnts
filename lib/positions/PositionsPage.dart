@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:justmnts/models/Position.dart';
@@ -35,8 +37,12 @@ class PositionsPage extends StatelessWidget {
                 itemCount: model.activePositions.length,
                 itemBuilder: (BuildContext context, int index) {
                   return InkWell(
-                    onTap: () => _navigateToPositionPage(
-                        context, model.activePositions[index]),
+                    onTap: () {
+                      log(index.toString());
+                      log(model.activePositions[index].toString());
+                      _navigateToPositionPage(
+                          context, model.activePositions[index]);
+                    },
                     child: Container(
                       height: 50,
                       child: Center(
